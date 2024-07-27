@@ -2,8 +2,10 @@ package main
 
 import (
 	"os"
+	"net/http"
 
 	"interview-project/db"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
