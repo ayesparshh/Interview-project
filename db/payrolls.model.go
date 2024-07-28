@@ -1,17 +1,38 @@
 package db
 
 import (
-	"errors"
+	"net/http"
 	"time"
-	
-	"github.com/rs/zerolog/log"
-	"gorm.io/gorm"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Payrolls model
 type Payrolls struct {
-	ID        	uint	  `gorm:"primaryKey" json:"id"`
-	EmployeeID 	uint	  `gorm:"not null" json:"employee_id"`
-	Date      	time.Time `gorm:"not null" json:"date"`
-	Amount    	uint	  `gorm:"not null" json:"amount"`
+	ID         uint      `gorm:"primaryKey" json:"id"`
+	EmployeeID uint      `gorm:"not null" json:"employee_id"`
+	Date       time.Time `gorm:"not null" json:"date"`
+	Amount     uint      `gorm:"not null" json:"amount"`
+}
+
+func (db DB) GetPayrolls(c *gin.Context) {
+	var payrolls []Payrolls
+	if result := db.conn.Find(&payrolls); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, payrolls)
+}
+
+func (db DB) CreatePayroll(c *gin.Context) {
+	var payroll Payrolls
+	if err := c.ShouldBindJSON(&payroll); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if result := db.conn.Create(&payroll); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, payroll)
 }
