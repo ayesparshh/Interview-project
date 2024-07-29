@@ -1,7 +1,11 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
+
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/ayesparshh/db"
 
@@ -9,16 +13,46 @@ import (
 )
 
 // RoleMiddleware checks if the user has the required role
+// var secretKey = []byte("UnboxingCommunity")
+
+// RoleMiddleware checks if the user has the required role
 func RoleMiddleware(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userRole := c.Query("role")
-		for _, role := range roles {
-			if userRole == role {
-				c.Next()
-				return
-			}
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
+			c.Abort()
+			return
 		}
-		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
+
+		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return secretKey, nil
+		})
+
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
+			return
+		}
+
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			userRole := claims["role"].(string)
+			for _, role := range roles {
+				if userRole == role {
+					c.Next()
+					return
+				}
+			}
+			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
+			c.Abort()
+		} else {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.Abort()
+		}
 	}
 }
 

@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -35,5 +36,7 @@ func (db DB) CreateBilling(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
+	// Log the created billing record
+	fmt.Printf("Created Billing: %+v\n", billing)
 	c.JSON(http.StatusOK, billing)
 }

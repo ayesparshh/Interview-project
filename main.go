@@ -29,6 +29,8 @@ func main() {
 
 	router := gin.Default()
 
+	router.POST("/login", routes.Login)
+
 	//sales
 	routes.CustomersRoutes(router, DB)
 
