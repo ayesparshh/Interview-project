@@ -15,6 +15,7 @@ type Payrolls struct {
 	Amount     uint      `gorm:"not null" json:"amount"`
 }
 
+// all payrolls
 func (db DB) GetPayrolls(c *gin.Context) {
 	var payrolls []Payrolls
 	if result := db.conn.Find(&payrolls); result.Error != nil {
@@ -24,6 +25,7 @@ func (db DB) GetPayrolls(c *gin.Context) {
 	c.JSON(http.StatusOK, payrolls)
 }
 
+// create a new payroll
 func (db DB) CreatePayroll(c *gin.Context) {
 	var payroll Payrolls
 	if err := c.ShouldBindJSON(&payroll); err != nil {

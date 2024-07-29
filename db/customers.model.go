@@ -20,6 +20,7 @@ type Customers struct {
 	Date    time.Time `gorm:"not null" json:"date"`
 }
 
+// all customers
 func (db DB) GetCustomers(c *gin.Context) {
 	var customers []Customers
 	if result := db.conn.Find(&customers); result.Error != nil {
@@ -29,6 +30,7 @@ func (db DB) GetCustomers(c *gin.Context) {
 	c.JSON(http.StatusOK, customers)
 }
 
+// create a new customer
 func (db DB) CreateCustomer(c *gin.Context) {
 	var customer Customers
 	if err := c.ShouldBindJSON(&customer); err != nil {

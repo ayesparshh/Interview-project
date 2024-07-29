@@ -13,9 +13,6 @@ import (
 )
 
 // RoleMiddleware checks if the user has the required role
-// var secretKey = []byte("UnboxingCommunity")
-
-// RoleMiddleware checks if the user has the required role
 func RoleMiddleware(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

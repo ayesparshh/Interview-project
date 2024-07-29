@@ -25,10 +25,10 @@ func main() {
 
 	DatabaseUrl := os.Getenv("DATABASE_URL")
 	DB := db.New(DatabaseUrl)
-	// DB.Seed()
 
 	router := gin.Default()
 
+	// login
 	router.POST("/login", routes.Login)
 
 	//sales

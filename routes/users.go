@@ -7,7 +7,8 @@ import (
 )
 
 func UserRoutes(router *gin.Engine, db db.DB) {
-	// Group for sales role with read/write access
+
+	// administrator have access to users
 	administratorGroup := router.Group("/users")
 	administratorGroup.Use(RoleMiddleware("administrator"))
 	{

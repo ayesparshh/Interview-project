@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// unboxing community secret key
 var secretKey = []byte("UnboxingCommunity")
 
 func generateToken(role string) (string, error) {

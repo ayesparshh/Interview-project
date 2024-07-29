@@ -16,6 +16,7 @@ type Users struct {
 	Date     time.Time `gorm:"not null" json:"date"`
 }
 
+// all users
 func (db DB) GetUsers(c *gin.Context) {
 	var users []Users
 	if result := db.conn.Find(&users); result.Error != nil {
@@ -25,6 +26,7 @@ func (db DB) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// create a new user
 func (db DB) CreateUser(c *gin.Context) {
 	var user Users
 	if err := c.ShouldBindJSON(&user); err != nil {

@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+// initalize the database
 type DB struct {
 	conn *gorm.DB
 }

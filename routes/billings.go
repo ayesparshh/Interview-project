@@ -7,15 +7,15 @@ import (
 )
 
 func BillingRoutes(router *gin.Engine, db db.DB) {
-	// Group for sales role with read/write access
+
+	// sales and accountant have access to billings
 	salesGroup := router.Group("/billings")
 	salesGroup.Use(RoleMiddleware("sales", "accountant"))
 	{
 		salesGroup.GET("", db.GetBillings)
-		// salesGroup.POST("", db.CreateBilling)
 	}
 
-	// Group for accountant role with view access
+	// sales have post access to billings
 	salesGroup.Use(RoleMiddleware("sales"))
 	{
 		salesGroup.POST("", db.GetBillings)

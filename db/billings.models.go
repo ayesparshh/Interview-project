@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -17,6 +16,7 @@ type Billings struct {
 	Amount   float64   `gorm:"not null" json:"amount"`
 }
 
+// all bills
 func (db DB) GetBillings(c *gin.Context) {
 	var billings []Billings
 	if result := db.conn.Find(&billings); result.Error != nil {
@@ -26,6 +26,7 @@ func (db DB) GetBillings(c *gin.Context) {
 	c.JSON(http.StatusOK, billings)
 }
 
+// crete a new bill
 func (db DB) CreateBilling(c *gin.Context) {
 	var billing Billings
 	if err := c.ShouldBindJSON(&billing); err != nil {
@@ -36,7 +37,6 @@ func (db DB) CreateBilling(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
-	// Log the created billing record
-	fmt.Printf("Created Billing: %+v\n", billing)
+
 	c.JSON(http.StatusOK, billing)
 }

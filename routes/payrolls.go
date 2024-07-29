@@ -6,7 +6,8 @@ import (
 )
 
 func PayrollRoutes(router *gin.Engine, db db.DB) {
-	// Group for hr role with read/write access
+
+	// hr and accountant have access to payrolls
 	salesGroup := router.Group("/payrolls")
 	salesGroup.Use(RoleMiddleware("hr", "accountant"))
 	{
@@ -14,7 +15,7 @@ func PayrollRoutes(router *gin.Engine, db db.DB) {
 		// salesGroup.POST("", db.CreatePayroll)
 	}
 
-	// Group for accountant role with view access
+	// hr have post access to payrolls
 	salesGroup.Use(RoleMiddleware("hr"))
 	{
 		salesGroup.POST("", db.GetPayrolls)
