@@ -9,15 +9,16 @@ import (
 )
 
 // RoleMiddleware checks if the user has the required role
-func RoleMiddleware(role string) gin.HandlerFunc {
+func RoleMiddleware(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userRole := c.Query("role")
-		if userRole != role {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
-			c.Abort()
-			return
+		for _, role := range roles {
+			if userRole == role {
+				c.Next()
+				return
+			}
 		}
-		c.Next()
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Forbidden"})
 	}
 }
 
