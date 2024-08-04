@@ -10,7 +10,7 @@
 - **Payrolls Management**: operations for managing payroll data.
 - **Users Management**: operations for managing user information.
 
-## Project Structur
+## Project Structure
 
 - **db/**: Contains the database models for billings, customers, payrolls, and users.
   - `billings.models.go`
