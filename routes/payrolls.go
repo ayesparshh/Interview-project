@@ -17,6 +17,6 @@ func PayrollRoutes(router *gin.Engine, db db.DB) {
 	// hr have post access to payrolls
 	salesGroup.Use(RoleMiddleware("hr"))
 	{
-		salesGroup.POST("", db.GetPayrolls)
+		salesGroup.POST("", db.CreatePayroll)
 	}
 }

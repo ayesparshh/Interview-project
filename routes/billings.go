@@ -18,6 +18,6 @@ func BillingRoutes(router *gin.Engine, db db.DB) {
 	// sales have post access to billings
 	salesGroup.Use(RoleMiddleware("sales"))
 	{
-		salesGroup.POST("", db.GetBillings)
+		salesGroup.POST("", db.CreateBilling)
 	}
 }

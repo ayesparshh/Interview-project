@@ -12,7 +12,7 @@ func UserRoutes(router *gin.Engine, db db.DB) {
 	administratorGroup := router.Group("/users")
 	administratorGroup.Use(RoleMiddleware("administrator"))
 	{
-		administratorGroup.GET("", db.GetBillings)
-		administratorGroup.POST("", db.CreateBilling)
+		administratorGroup.GET("", db.GetUsers)
+		administratorGroup.POST("", db.CreateUser)
 	}
 }
