@@ -38,6 +38,13 @@ func RoleMiddleware(roles ...string) gin.HandlerFunc {
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			userRole := claims["role"].(string)
+			queryRole := c.Query("role")
+			if queryRole != "" && userRole != queryRole {
+				c.JSON(http.StatusForbidden, gin.H{"error": "Role mismatch"})
+				c.Abort()
+				return
+			}
+
 			for _, role := range roles {
 				if userRole == role {
 					c.Next()
